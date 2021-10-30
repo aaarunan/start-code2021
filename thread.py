@@ -1,4 +1,5 @@
 from typing import List
+
 import discord
 
 
@@ -7,6 +8,7 @@ class Thread:
 
     def __init__(self, name: str, initiator: discord.User):
         self.name = name
+        self.initiator: discord.User = initiator
         self.queue: List[discord.User] = [initiator]
 
     def __repr__(self) -> str:

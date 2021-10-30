@@ -1,9 +1,9 @@
-from typing import Dict, List, Union
+from typing import List, Union
+
 import discord
-from discord.ext import commands
-from discord.raw_models import RawMessageUpdateEvent
-from thread import Thread
+
 from exceptions import ThreadNotInMeetingError, UserNotInThreadError
+from thread import Thread
 
 
 class Meeting:
@@ -30,7 +30,7 @@ class Meeting:
     def next_speaker(self) -> None:
         """Sets the speaker to the next user in the queue"""
         self.threads[0].remove_current()
-        if len(self.threads) == 0:
+        if len(self.threads[0].queue) == 0:
             self.threads.pop(0)
 
     def add_participant(self, user: discord.User) -> None:
@@ -45,7 +45,8 @@ class Meeting:
             raise UserNotInThreadError(e)
 
     @property
-    def current_speaker(self) -> Union(discord.User, None):
+    def current_speaker(self) -> Union[discord.User, None]:
+        """Gets the current speaker"""
         try:
             return self.threads[0].current_speaker
         except IndexError:
@@ -53,7 +54,5 @@ class Meeting:
 
     async def end(self) -> None:
         """Ends a meeting by notifying participants"""
-        # """?????""" Meldinger burde ikke sendes utenfor main!!:
-        await self.context.send("The meeting in " + self.channel + " has ended.")
-
-        # self.context | https://discordpy.readthedocs.io/en/stable/ext/commands/api.html#context
+        for user in self.participants:
+            await user.send(f"The meeting in {self.channel} has ended.")

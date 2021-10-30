@@ -1,6 +1,5 @@
 from typing import List, Union
 
-from discord.ext import commands
 from meeting import Meeting
 from exceptions import MeetingNotFoundError
 
@@ -16,18 +15,28 @@ class MeetingRegister:
         meeting = Meeting(channel)
         self.meetings.append(meeting)
 
-    def get_meeting_from_user(self, user: discord.User) -> Union(Meeting, None):
+    def get_meeting_from_user(self, user: discord.User) -> Union[Meeting, None]:
         """Returns a meeting the user is a participant of"""
         for meeting in self.meetings:
-            if user.id in map(lambda participant: participant.id, meeting.participants):
+            if user in meeting.participants:
                 return meeting
         return None
 
-    def remove_meeting(self, meeting_name: str) -> None:
+    def get_meeting_from_voice_channel(
+        self, channel: discord.VoiceChannel
+    ) -> Union[Meeting, None]:
+        """Returns the meeting happening in a voice channel, if there is one"""
+        for meeting in self.meetings:
+            if meeting.channel == channel:
+                return meeting
+        return None
+
+    def end_meeting(self, channel: discord.VoiceChannel) -> None:
         """Removes meeting from the meeting_register"""
         for i, meeting in enumerate(self.meetings):
-            if meeting.name == meeting_name:
+            if meeting.channel == channel:
                 self.meetings.pop(i)
+                meeting.end()
                 return
         raise MeetingNotFoundError("Meeting not found...")
 
