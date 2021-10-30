@@ -7,11 +7,10 @@ class Thread:
 
     def __init__(self, name: str, initiator: discord.User):
         self.name = name
-        self.initiator = initiator
         self.queue: List[discord.User] = [initiator]
 
     def __repr__(self) -> str:
-        return f"Thread(name={self.name}, initiator={self.initiator})"
+        return f"Thread(name={self.name}, queue={[user for user in self.queue]})"
 
     def add_comment(self, name: str, user: discord.User) -> None:
         """Adds a comment to a given topic"""

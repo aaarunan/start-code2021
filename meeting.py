@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Dict, List, Union
 import discord
 from discord.ext import commands
 from discord.raw_models import RawMessageUpdateEvent
@@ -9,15 +9,9 @@ from exceptions import ThreadNotInMeetingError, UserNotInThreadError
 class Meeting:
     """A Meeting that holds "threads" which are topics to be discussed"""
 
-    def __init__(
-        self,
-        context: commands.Context,
-        channel: discord.VoiceChannel,
-        initiator: discord.User,
-    ):
-        self.context = context
+    def __init__(self, channel: discord.VoiceChannel):
         self.channel = channel
-        self.participants: List[discord.User] = []
+        self.participants: List[discord.User] = [user for user in channel.members]
         self.threads: List[Thread] = []
 
     def add_thread(self, thread_name: str, initiator: discord.User) -> None:
