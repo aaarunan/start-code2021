@@ -43,6 +43,13 @@ class Meeting:
             self.participants.remove(user)
         except ValueError as e:
             raise UserNotInThreadError(e)
+        
+    def get_thread(self, thread_name) -> Union[None, Thread]:
+        """Gets a thread by name"""
+        for thread in self.threads:
+            if thread_name == thread.name:
+                return thread
+        return None
 
     @property
     def current_speaker(self) -> Union[discord.User, None]:

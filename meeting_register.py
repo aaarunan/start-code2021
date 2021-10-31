@@ -31,12 +31,12 @@ class MeetingRegister:
                 return meeting
         return None
 
-    def end_meeting(self, channel: discord.VoiceChannel) -> None:
+    async def end_meeting(self, channel: discord.VoiceChannel) -> None:
         """Removes meeting from the meeting_register"""
         for i, meeting in enumerate(self.meetings):
             if meeting.channel == channel:
                 self.meetings.pop(i)
-                meeting.end()
+                await meeting.end()
                 return
         raise MeetingNotFoundError("Meeting not found...")
 

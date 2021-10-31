@@ -14,9 +14,10 @@ class Thread:
     def __repr__(self) -> str:
         return f"Thread(name={self.name}, queue={[user for user in self.queue]})"
 
-    def add_comment(self, name: str, user: discord.User) -> None:
+    def add_comment(self, user: discord.User) -> None:
         """Adds a comment to a given topic"""
-        self.queue.append(user)
+        if user not in self.queue:
+            self.queue.append(user)
 
     def remove_comment(self, user: discord.User) -> None:
         """Removes a comment given by an user name"""
