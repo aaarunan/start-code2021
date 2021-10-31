@@ -42,6 +42,7 @@ async def create(ctx: commands.Context, *args):
             await ctx.send(
                 "Thread can not be started because you are not currently in a meeting.."
             )
+            return
 
         if len(meeting.threads) == 1 and len(meeting.threads[0].queue) == 1:
             await mute_all(meeting)
